@@ -1,9 +1,9 @@
 import { hashPassword } from "../helpers/authHelper.js";
 import { User } from "../models/userModel.js";
 
-const registerController = async () => {
+const registerController = async (req, res) => {
     try {
-        const { name, email, password, phone, address } = req.body;
+        const { name, email, password, phone, address } =req.body;
         if (!name) {
             return res.send({ error: 'Name is required' });
         }
@@ -35,8 +35,21 @@ const registerController = async () => {
             })
         }
         // register user 
-        const  HSPassword = await hashPassword(password)
-        
+        const hsPassword = await hashPassword(password)
+        // save user
+       const newUser = new User({
+        name, 
+        email,
+        address,
+        phone,
+        password : hashPassword
+       })
+       newUser.save()
+        res.status(201).send({
+            success: true,
+            message: 'User saved successfully',
+            newUser
+        })
     } catch (error) {
         console.log(error);
         res.status(500).send({

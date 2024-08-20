@@ -4,10 +4,8 @@ const hashPassword = async (password) => {
     try {
         const saltRounds = 10;
         const hashPassword = await bcrypt.hash(password, saltRounds);
-
     } catch (error) {
         console.log(error);
-
     }
 }
 
