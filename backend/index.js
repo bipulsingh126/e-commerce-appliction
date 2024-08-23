@@ -4,6 +4,7 @@ import connectDB from './config/db.js';
 import morgan from 'morgan';
 import authRoutes from './routes/authRoute.js'
 
+
 //rest object 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(morgan('dev'))
 
 //routes
 app.use('/api/v1/auth',authRoutes);
+
 
 //rest api
 
