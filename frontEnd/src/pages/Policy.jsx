@@ -3,8 +3,8 @@ import Layout from '../components/Layout/Layout.jsx';
 
 const Policy = () => {
   return (
-    <Layout>
-         <div className="row contactus ">
+    <Layout title={"Policy"}>
+         <div className="row contactus  ">
         <div className="col-md-6 ">
           <img
             src="/images/contactus.jpeg"
