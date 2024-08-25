@@ -1,12 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+import { SiPrestashop } from "react-icons/si";
 const Header = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <NavLink to="/" className="navbar-brand" href="#">
-            Navbar
-          </NavLink>
+          <Link to="/" className="navbar-brand" >
+          <SiPrestashop /> Ecommerce Store 
+          
+          </Link>
           <button
             className="navbar-toggler"
             type="button"
@@ -19,57 +21,30 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <NavLink
-                to="/"
-                  className="nav-link active"
-                  aria-current="page"
-                  href="#"
-                >
+                <NavLink to="/" className="nav-link">
                   Home
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink to="/" className="nav-link" href="#">
-                  Link
+                <NavLink to="/Category" className="nav-link">
+                  Category
                 </NavLink>
-              </li>
-              <li className="nav-item dropdown">
-                <NavLink
-                to="/"
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </NavLink>
-                <ul className="dropdown-menu">
-                  <li>
-                    <NavLink to="/" className="dropdown-item" href="#">
-                      Action
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/" className="dropdown-item" href="#">
-                      Another action
-                    </NavLink>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <NavLink to="/" className="dropdown-item" href="#">
-                      Something else here
-                    </NavLink>
-                  </li>
-                </ul>
               </li>
               <li className="nav-item">
-                <NavLink to="/" className="nav-link disabled" aria-disabled="true">
-                  Disabled
+                <NavLink to="/register" className="nav-link">
+                  register
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/login" className="nav-link">
+                  Login
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/cart" className="nav-link">
+                  Cart(0)
                 </NavLink>
               </li>
             </ul>
