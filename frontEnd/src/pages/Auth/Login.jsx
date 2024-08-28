@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../style/AuthStyle.css";
 import { useAuth } from "../../context/auth.jsx";
 const Login = () => {
@@ -10,7 +10,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [auth, setauth]= useAuth();
-
+  const location = useLocation();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -19,7 +19,7 @@ const Login = () => {
         password,
       });
 
-      if (res.data.success) {
+      if ( res && res.data.success) {
         toast.success(res.data && res.data.message);
         setauth(
           {
@@ -27,14 +27,15 @@ const Login = () => {
             user : res.data.user,
             token : res.data.token
           }
-        )
-        navigate("/");
+        );
+        localStorage.setItem("auth", JSON.stringify(res.data));
+        navigate( location.state ||"/");
       } else {
         toast.error(res.data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Registration failed. Please try again.");
+      toast.error("Something went worng");
     }
   };
 
