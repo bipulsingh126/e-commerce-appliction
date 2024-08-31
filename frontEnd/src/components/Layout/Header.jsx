@@ -3,24 +3,24 @@ import { SiPrestashop } from "react-icons/si";
 import { useAuth } from "../../context/auth.jsx";
 import { toast } from "react-toastify";
 const Header = () => {
+  const [auth, setAuth] = useAuth();
 
-  const [auth ,setAuth] = useAuth()
-
-  const handleLogout =()=>{
+  const handleLogout = () => {
     setAuth({
-      ...auth , user:null,token: ""
-    })
-    localStorage.removeItem('auth');
-    toast.success('Logout Successfully')
-  }
+      ...auth,
+      user: null,
+      token: "",
+    });
+    localStorage.removeItem("auth");
+    toast.success("Logout Successfully");
+  };
 
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <Link to="/" className="navbar-brand" >
-          <SiPrestashop /> Ecommerce Store 
-          
+          <Link to="/" className="navbar-brand">
+            <SiPrestashop /> Ecommerce Store
           </Link>
           <button
             className="navbar-toggler"
@@ -45,26 +45,48 @@ const Header = () => {
                   Category
                 </NavLink>
               </li>
-            {
-              !auth.user ? (<>
-                <li className="nav-item">
-                <NavLink to="/register" className="nav-link">
-                  register
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to="/login" className="nav-link">
-                  Login
-                </NavLink>
-              </li>
-              </>) : (<>
-                <li className="nav-item">
-                <NavLink onClick={handleLogout} to="/logout" className="nav-link">
-                  Logout
-                </NavLink>
-              </li>
-              </>)
-            }
+              {!auth.user ? (
+                <>
+                  <li className="nav-item">
+                    <NavLink to="/register" className="nav-link">
+                      register
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink to="/login" className="nav-link">
+                      Login
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item dropdown">
+                    <NavLink
+                      className="btn  dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {auth?.user?.name}
+                    </NavLink>
+                    <ul class="dropdown-menu dropdown-menu">
+                      <li>
+                        <NavLink className="dropdown-item" to="/dashboard">
+                          Dashbaord
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          onClick={handleLogout}
+                          to="/logout"
+                          className="dropdown-item"
+                        >
+                          Logout
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </li>
+                </>
+              )}
               <li className="nav-item">
                 <NavLink to="/cart" className="nav-link">
                   Cart(0)
