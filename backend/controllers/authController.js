@@ -4,7 +4,7 @@ import JWT from "jsonwebtoken";
 
 const registerController = async (req, res) => {
     try {
-        const { name, email, password, phone, address } = req.body;
+        const { name, email, password, phone, address, answer } = req.body;
         if (!name) {
             return res.send({ message: 'Name is required' });
         }
@@ -22,6 +22,9 @@ const registerController = async (req, res) => {
 
         if (!address) {
             return res.send({ message: 'address is required' });
+        }
+        if (!answer) {
+            return res.send({ message: 'answer is required'});
         }
 
         // check user
@@ -44,6 +47,7 @@ const registerController = async (req, res) => {
             address,
             phone,
             password: hashedPassword,
+            answer
         })
         newUser.save()
         res.status(201).send({
@@ -82,27 +86,27 @@ const loginController = async (req, res) => {
         }
         const match = await comparePassword(password, user.password);
         if (!match) {
-         return res.status(200).send({
+            return res.status(200).send({
                 success: true,
                 message: "Invalid password"
             });
         }
         //token
         const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-         res.status(200).send({ 
-            success : true,
-            message : "login Successfully ",
-           user : {
-            name : user.name,
-            email : user.email,
-            phone : user.phone,
-            address : user.address,
-           },
+        res.status(200).send({
+            success: true,
+            message: "login Successfully ",
+            user: {
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                address: user.address,
+            },
             token
         });
     } catch (error) {
         console.log(error);
-      return res.status(500).send({
+        return res.status(500).send({
             success: false,
             message: 'login failed',
             error
@@ -112,9 +116,55 @@ const loginController = async (req, res) => {
 }
 //test controller 
 
-const testController =  (req ,res)=>{
-console.log('protected route')
+const testController = (req, res) => {
+    console.log('protected route')
 }
 
+//forgot password --
 
-export { registerController, loginController, testController };
+const forgotPasswordController = async (req, res) => {
+    try {
+        const [email, answer, newPassword] = req.body
+        if (!email) {
+            res.status(400).send({
+                message: 'Email is required'
+            })
+        }
+        if (!answer) {
+            res.status(400).send({
+                message: 'question is required'
+            })
+        }
+        if (!newPassword) {
+            res.status(400).send({
+                message: 'newPassword is required'
+            })
+        }
+        //check
+        const user = await User.findOne({ email, answer })
+        //validation
+        if (!user) {
+            return res.status(404).send({
+                success: false,
+                message: 'worng Email or Answer'
+            })
+        }
+        const hashed = await hashPassword(newPassword);
+        await User.findByIdAndUpdate(user._id, { password: hashed });
+        res.status(200).send({
+            success: true,
+            message: "password Reset Successfully"
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: 'something went wrong',
+            error
+        })
+
+    }
+
+}
+
+export { registerController, loginController, testController, forgotPasswordController };

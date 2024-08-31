@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import Login from "./pages/Auth/Login.jsx";
 import Dashbord from "./pages/user/Dashbord.jsx";
 import PrivateRoute from "./components/Routes/Private.jsx";
+import ForgotPassword from "./pages/Auth/ForgotPassword.jsx";
 function App() {
   return (
     <>
@@ -19,6 +20,7 @@ function App() {
           <Route path="" element={<Dashbord />} />
         </Route>
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
