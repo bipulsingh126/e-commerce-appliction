@@ -68,9 +68,9 @@ const Header = () => {
                     >
                       {auth?.user?.name}
                     </NavLink>
-                    <ul class="dropdown-menu dropdown-menu">
+                    <ul class="dropdown-menu dropdown-menu blue">
                       <li>
-                        <NavLink className="dropdown-item" to="/dashboard">
+                        <NavLink className="dropdown-item" to={`/dashboard/${auth?.user?.role === 1 ?'admin':'user'}`}>
                           Dashbaord
                         </NavLink>
                       </li>
@@ -78,7 +78,7 @@ const Header = () => {
                         <NavLink
                           onClick={handleLogout}
                           to="/logout"
-                          className="dropdown-item"
+                          className="dropdown-item "
                         >
                           Logout
                         </NavLink>
@@ -88,7 +88,7 @@ const Header = () => {
                 </>
               )}
               <li className="nav-item">
-                <NavLink to="/cart" className="nav-link">
+                <NavLink to="/cart" className="nav-link ">
                   Cart(0)
                 </NavLink>
               </li>
