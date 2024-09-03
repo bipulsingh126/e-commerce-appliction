@@ -16,6 +16,7 @@ import CreateCategory from "./pages/Admin/CreateCategory.jsx";
 import Users from "./pages/Admin/Users.jsx";
 import Profile from "./pages/user/Profile.jsx";
 import Order from "./pages/user/Order.jsx";
+import 'antd/dist/reset.css';
 function App() {
   return (
     <>
