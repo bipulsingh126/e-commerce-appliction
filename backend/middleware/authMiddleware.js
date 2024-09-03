@@ -1,4 +1,4 @@
-import JWT from "jsonwebtoken";
+import JWT from 'jsonwebtoken';
 import { User } from "../models/userModel.js";
 
 //protected Routes token base
@@ -10,10 +10,12 @@ const requiredSignIn = async (req, res, next) => {
         next();
     } catch (error) {
         console.log(error);
-
-
+        return res.status(401).send({
+            success: false,
+            message: "Authentication failed",
+            error: error.message
+        });
     }
-
 }
 
 const isAdmin = async (req, res, next) => {
