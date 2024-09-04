@@ -54,7 +54,7 @@ const updateCategory = async (req, res) => {
 
     }
 }
-
+//get all category
 const categoryController = async (req, res) => {
     try {
         const categories = await Category.find({})

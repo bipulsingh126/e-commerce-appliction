@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout/Layout.jsx";
 import AdminMenu from "../../components/Layout/AdminMenu.jsx";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import axios from "axios";
 import CategoryFrom from "../../components/From/CategoryFrom.jsx";
 import { Modal } from "antd";
@@ -131,7 +131,12 @@ const CreateCategory = () => {
                           >
                             Edit
                           </button>
-                          <button className=" ms  -2 btn btn-danger"  onClick={()=>{handleDelete(c._id)}} >
+                          <button
+                            className=" ms  -2 btn btn-danger"
+                            onClick={() => {
+                              handleDelete(c._id);
+                            }}
+                          >
                             Delete
                           </button>
                         </td>
