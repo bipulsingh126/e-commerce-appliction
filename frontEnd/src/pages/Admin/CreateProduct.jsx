@@ -4,6 +4,7 @@ import AdminMenu from "../../components/Layout/AdminMenu.jsx";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { Select } from "antd";
+import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 
 const CreateProduct = () => {
@@ -16,6 +17,7 @@ const CreateProduct = () => {
   const [category, setCategory] = useState("");
   const [photo, setPhoto] = useState([]);
   const [file, setFile] = useState("");
+  const navigate = useNavigate();
 
   // handle cretae product preview
   const createPreviewUrl = () => {
@@ -53,7 +55,24 @@ const CreateProduct = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      
+      const productData = new FormData();
+      productData.append("name", name);
+      productData.append("description", description);
+      productData.append("price", price);
+      productData.append("quantity", quantity);
+      productData.append("shipping", shipping);
+      productData.append("category", category);
+      productData.append("photo", photo);
+      const { data } = await axios.post(
+        `http://localhost:5000/api/v1/product/create-product`,
+        productData
+      );
+      if (data?.success) {
+        toast.success("Product created successfully");
+        navigate("/dashboard/admin/products");
+      } else {
+        toast.error(data?.message);
+      }
     } catch (error) {
       console.log(error);
       toast.error("Error in creating product");
