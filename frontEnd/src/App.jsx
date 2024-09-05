@@ -16,7 +16,8 @@ import CreateCategory from "./pages/Admin/CreateCategory.jsx";
 import Users from "./pages/Admin/Users.jsx";
 import Profile from "./pages/user/Profile.jsx";
 import Order from "./pages/user/Order.jsx";
-import 'antd/dist/reset.css';
+import "antd/dist/reset.css";
+import Product from "./pages/Admin/Product.jsx";
 function App() {
   return (
     <>
@@ -32,6 +33,7 @@ function App() {
           <Route path="admin" element={<AdminDashboard />} />
           <Route path="admin/create-category" element={<CreateCategory />} />
           <Route path="admin/create-product" element={<CreateProduct />} />
+          <Route path="admin/products" element={<Product />} />
           <Route path="admin/users" element={<Users />} />
         </Route>
         <Route path="/register" element={<Register />} />
