@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema({
         contentType: String
     },
     shipping: {
-        type: Boolean,
+        type: Boolean,  
     },
     quantity : {
         type: Number,

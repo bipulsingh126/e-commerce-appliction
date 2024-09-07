@@ -35,7 +35,7 @@ const Product = () => {
           <h1 className="text-center">All Products List</h1>
           <div className="d-flex flex-wrap justify-content-center">
             {products.map((p) => (
-              <Link to={`/dashboard/admin/product/${p.slug}`} key={p._id}>
+              <Link to={`/dashboard/admin/product/${p.slug}`} key={p._id}  className="text-decoration-none text-dark" >
                 <div className="card m-3" style={{ width: "18rem" }}>
                   <img
                     src={`http://localhost:5000/api/v1/product/product-photo/${p._id}`}
