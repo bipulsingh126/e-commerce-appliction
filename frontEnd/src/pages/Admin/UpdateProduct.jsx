@@ -107,6 +107,8 @@ const UpdateProduct = () => {
 
   //handle delete product
   const handleDelete = async () => {
+    let answer = window.prompt("are you sure you want to delete this product?");
+    if (!answer) return;
     try {
       const { data } = await axios.delete(
         `http://localhost:5000/api/v1/product/delete-product/${id}`
@@ -243,7 +245,7 @@ const UpdateProduct = () => {
                 <button
                   type="submit"
                   onClick={handleDelete}
-                  className="btn btn-danger"
+                  className="btn btn-danger ms-2 "
                 >
                   Delete Product
                 </button>
