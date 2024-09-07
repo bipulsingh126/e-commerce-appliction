@@ -167,6 +167,76 @@ const updateProduct = async (req, res) => {
     }
 }
 
+//product filter
 
+const productFilters = async (req, res) => {
+    try {
+        const { checked, radio } = req.body;
+        let args = {};
+        if (checked.length > 0) {
+            args.category = checked;
+        }
+        if (radio.length) {
+            args.price = { $gte: radio[0], $lte: radio[1] };
+        }
+        const products = await Product.find(args);
+        res.status(200).send({
+            success: true,
+            message: "All Category List",
+            products
+        })
 
-export { createProduct, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct };
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send({
+            success: false,
+            message: "Error While Filtering Product",
+            error: error.message
+        })
+    }
+}
+
+//product count
+
+const productCount = async (req, res) => {
+    try {
+        const total = await Product.find({}).estimatedDocumentCount();
+        res.status(200).send({
+            success: true,
+            total,
+            message: "Product count"
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            success: false,
+            message: " Error while getting product count",
+            error: error.message
+        })
+    }
+}
+
+//product per page
+
+const productPerPage = async (req, res) => {
+    try {
+        const perpage = 6;
+        const page = req.params.page ? req.params.page : 1;
+        const products = await Product.find({}).select("-photo").skip((page - 1) * perpage).limit(perpage).sort({ createdAt: -1 });
+        res.status(200).send({
+            success: true,
+            products,
+            total: products.length,
+            message: "Product per page"
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send({
+            success: false,
+            message: "Error while getting product per page",
+            error: error.message
+        })
+    }
+}
+
+export { createProduct, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct, productFilters, productCount, productPerPage };
