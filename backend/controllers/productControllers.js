@@ -1,7 +1,7 @@
 import { Product } from "../models/productModel.js";
 import fs from 'fs';
 import slugify from 'slugify';
-
+import { Category } from '../models/categoryModel.js';
 const createProduct = async (req, res) => {
     try {
         const { name, slug, price, description, category, shipping, quantity } = req.fields
@@ -291,4 +291,26 @@ const similarProduct = async (req, res) => {
     }
 }
 
-export { createProduct, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct, productFilters, productCount, productPerPage, searchProduct, similarProduct };
+
+//product by category
+const productByCategory = async (req, res) => {
+    try {
+        const categorys = await Category.findOne({ slug: req.params.slug });
+        const products = await Product.find({ category: categorys._id }).populate('category')
+        res.status(200).send({
+            success: true,
+            message: "All product by category",
+            products,
+            categorys
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            success: false,
+            message: "Error while getting product by category",
+            error: error.message
+        })
+    }
+}
+
+export { createProduct, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct, productFilters, productCount, productPerPage, searchProduct, similarProduct, productByCategory };

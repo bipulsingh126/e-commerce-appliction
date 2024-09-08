@@ -21,6 +21,8 @@ import Product from "./pages/Admin/Product.jsx";
 import UpdateProduct from "./pages/Admin/UpdateProduct.jsx";
 import Searchs from "./pages/Searchs.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+import Categories from "./pages/Categories.jsx";
+import CategoryProduct from "./pages/CategoryProduct.jsx";
 function App() {
   return (
     <>
@@ -28,6 +30,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Searchs />} />
         <Route path="/product/:slug" element={<ProductDetails />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/category/:slug" element={<CategoryProduct />} />
         //create nested route
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route path="user" element={<Dashbord />} />

@@ -3,9 +3,10 @@ import { SiPrestashop } from "react-icons/si";
 import { useAuth } from "../../context/auth.jsx";
 import { toast } from "react-toastify";
 import SearchInput from "../From/SearchInput.jsx";
+import usecategory from "../../Hook/UseCategory.jsx";
 const Header = () => {
   const [auth, setAuth] = useAuth();
-
+  const categories = usecategory();
   const handleLogout = () => {
     setAuth({
       ...auth,
@@ -30,7 +31,8 @@ const Header = () => {
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
-            aria-label="Toggle navigation"z
+            aria-label="Toggle navigation"
+            z
           >
             <span className="navbar-toggler-icon"></span>
           </button>
@@ -42,11 +44,33 @@ const Header = () => {
                   Home
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink to="/Category" className="nav-link">
-                  Category
-                </NavLink>
+              <li className="nav-item dropdown">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  to={`/categories`}
+                >
+                  Categories
+                </Link>
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link className="dropdown-item" to={`/categories`}>
+                      All Categories
+                    </Link>
+                  </li>
+                  {categories?.map((c) => (
+                    <li key={c._id}>
+                      <Link
+                        className="dropdown-item"
+                        to={`/category/${c.slug}`}
+                      >
+                        {c.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </li>
+
               {!auth.user ? (
                 <>
                   <li className="nav-item">
