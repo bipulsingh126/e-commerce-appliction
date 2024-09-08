@@ -2,6 +2,7 @@ import { NavLink, Link } from "react-router-dom";
 import { SiPrestashop } from "react-icons/si";
 import { useAuth } from "../../context/auth.jsx";
 import { toast } from "react-toastify";
+import SearchInput from "../From/SearchInput.jsx";
 const Header = () => {
   const [auth, setAuth] = useAuth();
 
@@ -29,12 +30,13 @@ const Header = () => {
             data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
-            aria-label="Toggle navigation"
+            aria-label="Toggle navigation"z
           >
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <SearchInput />
               <li className="nav-item">
                 <NavLink to="/" className="nav-link">
                   Home
@@ -70,7 +72,12 @@ const Header = () => {
                     </NavLink>
                     <ul class="dropdown-menu dropdown-menu blue">
                       <li>
-                        <NavLink className="dropdown-item" to={`/dashboard/${auth?.user?.role === 1 ?'admin':'user'}`}>
+                        <NavLink
+                          className="dropdown-item"
+                          to={`/dashboard/${
+                            auth?.user?.role === 1 ? "admin" : "user"
+                          }`}
+                        >
                           Dashbaord
                         </NavLink>
                       </li>

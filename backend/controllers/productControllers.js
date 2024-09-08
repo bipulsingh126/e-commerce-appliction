@@ -239,4 +239,56 @@ const productPerPage = async (req, res) => {
     }
 }
 
-export { createProduct, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct, productFilters, productCount, productPerPage };
+//search product
+const searchProduct = async (req, res) => {
+    try {
+        const { keyword } = req.params;
+        const result = await Product.find({
+            $or: [
+                {
+                    name: { $regex: keyword, $options: "i" },
+                },
+                {
+                    description: { $regex: keyword, $options: "i" },
+                }
+            ]
+        }).select("-photo")
+        res.status(200).send({
+            success: true,
+            message: "All search product",
+            result
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            success: false,
+            message: "Error while searching product",
+            error: error.message
+        })
+    }
+}
+
+//similar product
+const similarProduct = async (req, res) => {
+    try {
+        const { pid, cid } = req.params;
+        const products = await Product.find({
+            category: cid,
+            _id: { $ne: pid }
+        }).select("-photo").limit(3).populate('category');
+        res.status(200).send({
+            success: true,
+            message: "All similar product",
+            products
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(400).send({
+            success: false,
+            message: "Error while getting similar product",
+            error: error.message
+        })
+    }
+}
+
+export { createProduct, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct, productFilters, productCount, productPerPage, searchProduct, similarProduct };

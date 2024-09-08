@@ -3,6 +3,7 @@ import Layout from "../components/Layout/Layout.jsx";
 import axios from "axios";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices.jsx";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -12,6 +13,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
   //get total count
 
   const getTotal = async () => {
@@ -39,7 +41,7 @@ const Home = () => {
       setLoading(false);
     }
   };
-  useEffect(() => { 
+  useEffect(() => {
     loadMore();
   }, [page]);
 
@@ -172,7 +174,10 @@ const Home = () => {
                       {p.description.substring(0, 30)}...
                     </p>
                     <p className="card-text">₹{p.price}</p>
-                    <button className="btn btn-primary ms-1">
+                    <button
+                      className="btn btn-primary ms-1"
+                      onClick={() => navigate(`/product/${p.slug}`)}
+                    >
                       More Details
                     </button>
                     <button className="btn btn-secondary ms-1">
