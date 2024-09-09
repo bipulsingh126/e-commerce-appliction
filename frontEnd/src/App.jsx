@@ -23,6 +23,7 @@ import Searchs from "./pages/Searchs.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import Categories from "./pages/Categories.jsx";
 import CategoryProduct from "./pages/CategoryProduct.jsx";
+import CartPage from "./pages/CartPage.jsx";
 function App() {
   return (
     <>
@@ -32,6 +33,7 @@ function App() {
         <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/category/:slug" element={<CategoryProduct />} />
+        <Route path="/cart" element={<CartPage />} />
         //create nested route
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route path="user" element={<Dashbord />} />

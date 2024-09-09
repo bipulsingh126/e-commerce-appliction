@@ -4,6 +4,8 @@ import axios from "axios";
 import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices.jsx";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/Cart.jsx";
+import toast from "react-hot-toast";
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -12,6 +14,7 @@ const Home = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [cart, setCart] = useCart();
 
   const navigate = useNavigate();
   //get total count
@@ -180,7 +183,14 @@ const Home = () => {
                     >
                       More Details
                     </button>
-                    <button className="btn btn-secondary ms-1">
+                    <button
+                      className="btn btn-secondary ms-1"
+                      onClick={() => {
+                        setCart([...cart, p]);
+                        localStorage.setItem("cart", JSON.stringify([...cart, p]));
+                        toast.success("Add to cart successfully");
+                      }}
+                    >
                       {" "}
                       Add to Cart
                     </button>
@@ -189,7 +199,7 @@ const Home = () => {
               </div>
             ))}
           </div>
-          <div className="m-2 p-3 " >
+          <div className="m-2 p-3 ">
             {products && products.length < total && (
               <button
                 className="btn btn-warning"
