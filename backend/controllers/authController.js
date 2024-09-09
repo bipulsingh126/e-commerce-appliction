@@ -168,4 +168,40 @@ const forgotPasswordController = async (req, res) => {
 
 }
 
-export { registerController, loginController, testController, forgotPasswordController };
+// update profile
+
+const updateProfileController = async (req, res) => {
+    try {
+        const { name, email, password, phone, address } = req.body
+        const users = await User.findById(req.user._id)
+        //password
+        if (password && password.length < 6) {
+            return res.status(400).send({
+                success: false,
+                message: 'password is required and should be at least 6 characters'
+            })
+        }
+        const hashedPassword = password ? await hashPassword(password) : undefined
+        const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+            name: name || users.name,
+            email: email || users.email,
+            password: hashedPassword || users.password,
+            phone: phone || users.phone,
+            address: address || users.address
+        }, { new: true })
+        res.status(200).send({
+            success: true,
+            message: 'profile updated successfully',
+            updatedUser
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: 'error in profile',
+            error
+        })
+    }
+}
+
+export { registerController, loginController, testController, forgotPasswordController, updateProfileController };
