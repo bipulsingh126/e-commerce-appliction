@@ -1,7 +1,7 @@
 import { NavLink, Link } from "react-router-dom";
 import { SiPrestashop } from "react-icons/si";
 import { useAuth } from "../../context/auth.jsx";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import SearchInput from "../From/SearchInput.jsx";
 import usecategory from "../../Hook/UseCategory.jsx";
 import { useCart } from "../../context/Cart.jsx";

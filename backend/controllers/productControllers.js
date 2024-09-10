@@ -2,6 +2,27 @@ import { Product } from "../models/productModel.js";
 import fs from 'fs';
 import slugify from 'slugify';
 import { Category } from '../models/categoryModel.js';
+import braintree from 'braintree';
+import { Order } from "../models/orderModel.js";
+
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+
+
+
+//payment getway
+const gateway = new braintree.BraintreeGateway({
+    environment: braintree.Environment.Sandbox,
+    merchantId: process.env.BRAINTREE_MERCHANT_ID,
+    publicKey: process.env.BRAINTRREE_PUBLIC_KEY,
+    privateKey: process.env.BRAINTRREE_PRIVATE_KEY,
+});
+
+
+
+
 const createProduct = async (req, res) => {
     try {
         const { name, slug, price, description, category, shipping, quantity } = req.fields
@@ -313,4 +334,66 @@ const productByCategory = async (req, res) => {
     }
 }
 
-export { createProduct, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct, productFilters, productCount, productPerPage, searchProduct, similarProduct, productByCategory };
+
+// payment get way
+const braintreeToken = async (req, res) => {
+    try {
+        gateway.clientToken.generate({}, function (err, response) {
+            if (err) {
+                res.status(500).send(err);
+            } else {
+                res.send(response);
+            }
+        })
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send({
+            success: false,
+            message: "Error while getting braintree token",
+            error: error.message
+        })
+    }
+}
+
+//payment
+
+const braintreePayment = async (req, res) => {
+    try {
+        const { cart, nonce } = req.body;
+        let total = 0;
+        cart.map((i) => { total += i.price });
+        let newTransaction = gateway.transaction.sale({
+            amount: total,
+            paymentMethodNonce: nonce,
+            options: {
+                submitForSettlement: true
+            }
+        },
+            function (err, result) {
+                if (result) {
+                    const orders = new Order({
+                        products: cart,
+                        payment: result,
+                        buyer: req.user._id
+                    }).save();
+                    res.send({ ok: true });
+                } else {
+                    res.status(500).send({
+                        success: false,
+                        message: "Payment failed",
+                        error: err
+                    })
+                }
+            }
+        )
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send({
+            success: false,
+            message: "Error while getting braintree payment",
+            error: error.message
+        })
+    }
+}
+
+export { createProduct, braintreePayment, braintreeToken, getProduct, getSingleProduct, productPhoto, deleteProduct, updateProduct, productFilters, productCount, productPerPage, searchProduct, similarProduct, productByCategory };
