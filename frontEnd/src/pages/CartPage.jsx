@@ -3,16 +3,14 @@ import Layout from "../components/Layout/Layout.jsx";
 import { useCart } from "../context/Cart.jsx";
 import { useAuth } from "../context/auth.jsx";
 import { useNavigate } from "react-router-dom";
-import DropIn from "braintree-web-drop-in-react";
-import axios from "axios";
+import { loadStripe } from "@stripe/stripe-js";
+
 import { toast } from "react-hot-toast";
+import axios from "axios";
 const CartPage = () => {
   const [cart, setCart] = useCart();
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
-  const [clientToken, setClientToken] = useState("");
-  const [instance, setInstance] = useState("");
-  const [loading, setLoading] = useState(false);
 
   //total price
   const totalPrice = () => {
@@ -43,39 +41,73 @@ const CartPage = () => {
     }
   };
 
-  // get payment gateway token
-  const getToken = async () => {
+  // payment integration
+  const handlePayment = async () => {
     try {
-      const { data } = await axios.get(
-        'http://localhost:5000/api/v1/product/braintree/token'
+      const stripe = await loadStripe(
+        "pk_test_51PxQsGAV766sEG05jVboUNrdxYryhjuGhNLVfdX63aRhJ1Gy6OShfa6ckauVf8KKCKrPmYgvNtH8Cbr2qZ6Cyq3n00GbCCZR05"
       );
-      setClientToken(data?.clientToken);
+      const body = {
+        products: cart,
+        user: auth?.user,
+      };
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/product/checkout-payment",
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const session = res.data;
+      const result = await stripe.redirectToCheckout({ sessionId: session.id });
+      if (result.error) {
+        toast.error(result.error.message);
+      }
+      
     } catch (error) {
-      console.log(error);
+      console.log("Stripe payment error:", error);
+      toast.error("Payment failed. Please try again.");
     }
   };
 
-  useEffect(() => {
-    getToken();
-  }, [auth?.token]);
-
-  const handlePayment = async () => {
+  const makePayment = async () => {
     try {
-      setLoading(true);
-      const { nonce } = await instance.requestPaymentMethod();
-      const { data } = await axios.post(
-        `http://localhost:5000/api/v1/product/braintree/payment`,
-        { nonce, cart }
+      const stripe = await loadStripe(
+        "pk_test_51PxQsGAV766sEG05jVboUNrdxYryhjuGhNLVfdX63aRhJ1Gy6OShfa6ckauVf8KKCKrPmYgvNtH8Cbr2qZ6Cyq3n00GbCCZR05"
       );
-      setLoading(false);
-      localStorage.removeItem("cart");
-      setCart([]);
+      const body = {
+        products: cart,
+        user: auth?.user,
+      };
+      const res = await axios.post(
+        "http://localhost:5000/api/v1/product/checkout-payment",
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const session = res.data;
+      const result = await stripe.redirectToCheckout({ sessionId: session.id });
+      if (result.error) {
+        toast.error(result.error.message);
+      }
+      // Ensure the order is saved in the database
+      await axios.post(
+        "http://localhost:5000/api/v1/auth/orders",
+        body,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       navigate("/dashboard/user/order");
-      toast.success("Payment successful");
     } catch (error) {
       console.log(error);
-      setLoading(false);
-      toast.error("Payment failed");
     }
   };
 
@@ -160,26 +192,9 @@ const CartPage = () => {
           )}
 
           <div className="mt-2">
-            {!clientToken || !cart?.length ? (
-              ""
-            ) : (
-              <>
-                <DropIn
-                  options={{
-                    authorization: clientToken,
-                    paypal: { flow: "vault" },
-                  }}
-                  onInstance={(instance) => setInstance(instance)}
-                />
-                <button
-                  className="btn btn-primary"
-                  onClick={handlePayment}
-                  disabled={!loading || !instance || !auth?.user?.address}
-                >
-                  {loading ? "Loading..." : "Make Payment"}
-                </button>
-              </>
-            )}
+            <button className="btn btn-success" onClick={makePayment}>
+              Payment
+            </button>
           </div>
         </div>
       </div>
