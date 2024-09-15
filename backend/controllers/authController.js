@@ -204,23 +204,25 @@ const updateProfileController = async (req, res) => {
         })
     }
 }
+
+
 //get orders
-const getOrders = async (req, res) => {
-    try {
-        const orders = await Order.find({ buyer: req.user._id }).populate("products", "-photo").populate("buyer", "name");
-        res.status(200).send({
-            success: true,
-            message: "All orders",
-            orders
-        })
-    } catch (error) {
-        console.log(error.message);
+const getOrdersController = async (req, res) => {
+     try {
+       const orders = await Order.find({ buyer: req.user._id}).populate("product", "-photo").populate("buyer", "name")
+       res.status(200).send({
+        success: true,
+        message: 'orders fetched successfully',
+        orders
+       })
+     } catch (error) {
+        console.log(error);
         res.status(500).send({
             success: false,
-            message: "Error while getting orders",
-            error: error.message
+            message: 'error in orders',
+            error
         })
-    }
+     }
 }
 
-export { getOrders, registerController, loginController, testController, forgotPasswordController, updateProfileController };
+export { getOrdersController, registerController, loginController, testController, forgotPasswordController, updateProfileController };

@@ -34,7 +34,7 @@ function App() {
         <Route path="/categories" element={<Categories />} />
         <Route path="/category/:slug" element={<CategoryProduct />} />
         <Route path="/cart" element={<CartPage />} />
-        //create nested route
+        {/* create nested route */}
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route path="user" element={<Dashbord />} />
           <Route path="user/profile" element={<Profile />} />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../../components/Layout/Layout.jsx";
 import AdminMenu from "../../components/Layout/AdminMenu.jsx";
 import toast from "react-hot-toast";
@@ -116,7 +116,7 @@ const CreateCategory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {categories.map((c) => (
+                  {categories?.map((c) => (
                     <>
                       <tr key={c._id}>
                         <td>{c.name}</td>
