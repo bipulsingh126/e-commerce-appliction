@@ -67,7 +67,7 @@ const Order = () => {
                     </tbody>
                   </table>
                   <div className="col-md-8">
-                    {order?.products?.map((p,i) => (
+                    {order?.products?.map((p, i) => (
                       <div className="row mb-2 p-3 card flex-row" key={p._id}>
                         <div className="col-md-4">
                           <img
