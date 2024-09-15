@@ -9,7 +9,7 @@ const AuthProvider = ({ children }) => {
         user: null,
         token: "",
     });
- 
+  const url ='https://e-commerce-appliction.onrender.com/'
     //default axios 
     axios.defaults.headers.common['Authorization'] = auth?.token
 
